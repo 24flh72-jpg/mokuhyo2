@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 ★目標必達★ リアルタイムシミュレーション</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
+            --success: #16a34a;
+            --danger: #dc2626;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border-color: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 30px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 45px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.07);
+            border: 1px solid var(--border-color);
+        }
+        .header-banner {
+            background: var(--accent-gradient);
+            color: #fff;
+            padding: 26px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
+        }
+        h1 {
+            font-size: 28px;
+            margin: 0 0 6px 0;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 日数設定エリア */
+        .days-section {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 22px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+        .days-group label {
+            font-size: 12px;
+            color: var(--text-sub);
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        .days-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 17px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+            background: #fff;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+        .days-group input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 金額・条件入力エリア */
+        .input-section {
+            background: #f1f5f9;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 35px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 15px;
+            border: 1px solid var(--border-color);
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .input-group label {
+            font-size: 12px;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        .input-group input {
+            padding: 12px 14px;
+            font-size: 17px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            background: #fff;
+            text-align: right;
+            font-weight: 700;
+            color: var(--primary);
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        /* ダッシュボードカード */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+        .dash-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 20px 14px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .dash-card .dash-label {
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .dash-card .dash-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .dash-card .dash-sub {
+            font-size: 11px;
+            margin-top: 8px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+        .dash-card.highlight {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-color: #93c5fd;
+        }
+
+        /* 計算ステップカード */
+        .calc-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .step-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 20px 24px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+        .step-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .step-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 4px;
+        }
+        .step-formula {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .step-result-box {
+            text-align: right;
+        }
+        .step-result-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 2px;
+        }
+        .step-result-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--danger);
+        }
+
+        .support-msg {
+            margin-top: 35px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-main);
+            background: #fefce8;
+            border: 1px solid #fef08a;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-banner">
+        <h1>🔥 ★目標必達★ 🔥</h1>
+        <div class="subtitle">全員で目指す！リアルタイム売上・稼働シミュレーション</div>
+    </div>
+
+    <!-- 日数設定エリア（デフォルト空欄） -->
+    <div class="section-title">📅 日数スケジュール設定</div>
+    <div class="days-section">
+        <div class="days-group">
+            <label for="totalDays">今月日数 (日)</label>
+            <input type="number" id="totalDays" placeholder="" oninput="calculate()">
+        </div>
+        <div class="days-group">
+            <label for="elapsedDays">経過数 (日)</label>
+            <input type="number" id="elapsedDays" placeholder="" oninput="calculate()">
+        </div>
+        <div class="days-group">
+            <label>残り日数 (自動)</label>
+            <div id="dispRemainingDays" style="font-size: 20px; font-weight: 800; color: var(--accent); padding-top: 8px;">0日</div>
+        </div>
+    </div>
+
+    <!-- 金額・条件入力エリア（デフォルト空欄） -->
+    <div class="section-title">⚙️ 目標・実績データ入力</div>
+    <div class="input-section">
+        <div class="input-group">
+            <label for="targetSales">目標売上 (円)</label>
+            <input type="text" id="targetSales" placeholder="" onfocus="unsetCurrency(this)" onblur="setCurrency(this)" oninput="calculate()">
+        </div>
+        <div class="input-group">
+            <label for="currentSales">現状売上 (円)</label>
+            <input type="text" id="currentSales" placeholder="" onfocus="unsetCurrency(this)" onblur="setCurrency(this)" oninput="calculate()">
+        </div>
+        <div class="input-group">
+            <label for="unitPrice">単価 (円)</label>
+            <input type="text" id="unitPrice" placeholder="" onfocus="unsetCurrency(this)" onblur="setCurrency(this)" oninput="calculate()">
+        </div>
+        <div class="input-group">
+            <label for="turnoverRate">回転率</label>
+            <input type="number" step="0.01" id="turnoverRate" placeholder="" oninput="calculate()">
+        </div>
+    </div>
+
+    <!-- ダッシュボードカード -->
+    <div class="section-title">📊 現状進捗ダッシュボード</div>
+    <div class="dashboard-grid">
+        <div class="dash-card">
+            <div class="dash-label">現在の達成率</div>
+            <div class="dash-value" id="dispAchievementRate">0.0%</div>
+            <div class="dash-sub" id="dispPaceStatus" style="color: var(--text-sub);">理想: 0.0%</div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-label">現状の1日平均売上</div>
+            <div class="dash-value" id="dispDailyAvgSales">¥0</div>
+        </div>
+        <div class="dash-card highlight">
+            <div class="dash-label">現状の売上予測</div>
+            <div class="dash-value" id="dispLandingSales">¥0</div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-label">目標との比較</div>
+            <div class="dash-value" id="dispDiffSales" style="color: var(--danger);">+¥0</div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-label">達成率予測</div>
+            <div class="dash-value" id="dispLandingRate">0%</div>
+        </div>
+    </div>
+
+    <!-- 計算ステップカード -->
+    <div class="section-title">🚀 目標達成へのアクションプラン</div>
+    <div class="calc-steps">
+        <div class="step-card">
+            <div class="step-info">
+                <div class="step-title">STEP 1 : 残り必要売上の算出</div>
+                <div class="step-formula" id="dispSubFormula1">0 - 0</div>
+            </div>
+            <div class="step-result-box">
+                <div class="step-result-label">残り必要売上</div>
+                <div class="step-result-value" id="dispRemainder">¥0</div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-info">
+                <div class="step-title">STEP 2 : 1日あたりの必要ペース</div>
+                <div class="step-formula" id="dispSubFormula2">0 ÷ 0日</div>
+            </div>
+            <div class="step-result-box">
+                <div class="step-result-label">達成に必要な1日の売上</div>
+                <div class="step-result-value" id="dispRequiredDailySales">¥0</div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-info">
+                <div class="step-title">STEP 3 : 必要本数の換算</div>
+                <div class="step-formula" id="dispSubFormula3">0 ÷ 0</div>
+            </div>
+            <div class="step-result-box">
+                <div class="step-result-label">1日に必要な本数</div>
+                <div class="step-result-value" id="dispDailyCount" style="color: var(--primary);">0本</div>
+            </div>
+        </div>
+
+        <div class="step-card" style="border-left: 5px solid var(--success);">
+            <div class="step-info">
+                <div class="step-title">STEP 4 : 最終必要稼働人数</div>
+                <div class="step-formula" id="dispSubFormula4">0本 ÷ 0</div>
+            </div>
+            <div class="step-result-box">
+                <div class="step-result-label">1日に必要な出勤人数</div>
+                <div class="step-result-value" id="dispRequiredStaff" style="color: var(--success);">0人</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="support-msg">
+        🔥 チーム全員で数値を共有し、今月の目標を必ず達成させましょう！
+    </div>
+</div>
+
+<script>
+function formatCurrency(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return '¥0';
+    return '¥' + num.toLocaleString();
+}
+
+function unsetCurrency(input) {
+    let val = input.value.replace(/[¥,]/g, '');
+    input.value = val;
+}
+
+function setCurrency(input) {
+    let raw = input.value.replace(/[¥,]/g, '').trim();
+    if (raw === '') {
+        input.value = '';
+    } else {
+        let val = parseFloat(raw);
+        if (!isNaN(val)) {
+            input.value = formatCurrency(val);
+        } else {
+            input.value = '';
+        }
+    }
+    calculate();
+}
+
+function getVal(id) {
+    const el = document.getElementById(id);
+    let val = el.value.toString().replace(/[¥,]/g, '').trim();
+    if (val === '') return 0;
+    return parseFloat(val) || 0;
+}
+
+function calculate() {
+    const totalDays = parseFloat(document.getElementById('totalDays').value) || 0;
+    const elapsedDays = parseFloat(document.getElementById('elapsedDays').value) || 0;
+    const remainingDays = Math.max(0, totalDays - elapsedDays);
+    
+    const target = getVal('targetSales');
+    const current = getVal('currentSales');
+    const unitPrice = getVal('unitPrice');
+    const turnover = parseFloat(document.getElementById('turnoverRate').value) || 0;
+
+    document.getElementById('dispRemainingDays').innerText = remainingDays + '日';
+
+    const achievementRate = target > 0 ? (current / target) * 100 : 0;
+    const idealProgressRate = totalDays > 0 ? (elapsedDays / totalDays) * 100 : 0;
+
+    const paceStatusEl = document.getElementById('dispPaceStatus');
+    if (totalDays > 0 && elapsedDays > 0) {
+        if (achievementRate >= idealProgressRate) {
+            paceStatusEl.innerHTML = `理想: ${idealProgressRate.toFixed(1)}%<br><span style="color: var(--success);">（順調ペース 🚀）</span>`;
+        } else {
+            paceStatusEl.innerHTML = `理想: ${idealProgressRate.toFixed(1)}%<br><span style="color: var(--danger);">（要ペースアップ ⚠️）</span>`;
+        }
+    } else {
+        paceStatusEl.innerHTML = `理想: 0.0%`;
+    }
+
+    const dailyAvgSalesRaw = elapsedDays > 0 ? current / elapsedDays : 0;
+    const dailyAvgSales = Math.round(dailyAvgSalesRaw / 1000) * 1000;
+
+    const landingSalesRaw = dailyAvgSalesRaw * totalDays;
+    const landingSales = Math.round(landingSalesRaw / 1000) * 1000;
+
+    const diffSalesRaw = landingSales - target;
+    const diffSales = Math.round(diffSalesRaw / 1000) * 1000;
+
+    const landingRate = target > 0 ? (landingSales / target) * 100 : 0;
+    const remainder = Math.max(0, target - current);
+
+    const requiredDailySalesRaw = remainingDays > 0 ? remainder / remainingDays : 0;
+    const requiredDailySales = Math.round(requiredDailySalesRaw / 1000) * 1000;
+
+    const dailyCountRound = unitPrice > 0 ? Math.round(requiredDailySales / unitPrice) : 0;
+    const requiredStaffExact = turnover > 0 ? dailyCountRound / turnover : 0;
+    const requiredStaffRound = Math.ceil(requiredStaffExact);
+
+    // 画面反映
+    document.getElementById('dispAchievementRate').innerText = achievementRate.toFixed(1) + '%';
+    document.getElementById('dispDailyAvgSales').innerText = formatCurrency(dailyAvgSales);
+    document.getElementById('dispLandingSales').innerText = formatCurrency(landingSales);
+    
+    const diffElement = document.getElementById('dispDiffSales');
+    diffElement.innerText = (diffSales >= 0 ? '+' : '') + formatCurrency(diffSales);
+    diffElement.style.color = diffSales >= 0 ? 'var(--success)' : 'var(--danger)';
+
+    document.getElementById('dispLandingRate').innerText = landingRate.toFixed(0) + '%';
+
+    document.getElementById('dispSubFormula1').innerText = (target > 0 || current > 0) ? (formatCurrency(target) + ' - ' + formatCurrency(current)) : '0 - 0';
+    document.getElementById('dispRemainder').innerText = formatCurrency(remainder);
+
+    document.getElementById('dispSubFormula2').innerText = (remainder > 0 && remainingDays > 0) ? (formatCurrency(remainder) + ' ÷ ' + remainingDays + '日') : '0 ÷ 0日';
+    document.getElementById('dispRequiredDailySales').innerText = formatCurrency(requiredDailySales);
+
+    document.getElementById('dispSubFormula3').innerText = (requiredDailySales > 0 && unitPrice > 0) ? (formatCurrency(requiredDailySales) + ' ÷ ' + formatCurrency(unitPrice)) : '0 ÷ 0';
+    document.getElementById('dispDailyCount').innerText = dailyCountRound + '本';
+
+    document.getElementById('dispSubFormula4').innerText = (dailyCountRound > 0 && turnover > 0) ? (dailyCountRound + '本 ÷ ' + turnover) : '0本 ÷ 0';
+    document.getElementById('dispRequiredStaff').innerText = requiredStaffRound + '人';
+}
+</script>
+
+</body>
+</html>
