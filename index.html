@@ -6,468 +6,653 @@
     <title>🔥 ★目標必達★ リアルタイムシミュレーション</title>
     <style>
         :root {
-            --primary: #0f172a;
-            --accent: #2563eb;
-            --accent-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
-            --success: #16a34a;
-            --danger: #dc2626;
-            --bg-color: #f8fafc;
+            --primary-gradient: linear-gradient(135deg, #FF416C, #FF4B2B);
+            --bg-color: #f4f6f9;
             --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-sub: #64748b;
-            --border-color: #e2e8f0;
+            --text-main: #333333;
+            --text-sub: #666666;
+            --accent-color: #FF4B2B;
+            --manual-bg: #fffdf5; 
+            --manual-border: #f6ad55; 
         }
-        body {
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            margin: 0;
-            padding: 30px 20px;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
         }
+
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 45px;
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--card-bg);
             border-radius: 24px;
-            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.07);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 24px;
         }
-        .header-banner {
-            background: var(--accent-gradient);
-            color: #fff;
-            padding: 26px;
-            border-radius: 16px;
+
+        /* ヘッダーセクション */
+        .header-card {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 24px 20px;
             text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
         }
-        h1 {
-            font-size: 28px;
-            margin: 0 0 6px 0;
-            letter-spacing: 1px;
-            font-weight: 800;
-        }
-        .subtitle {
+
+        .date-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 4px 14px;
+            border-radius: 20px;
             font-size: 13px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-        
-        .section-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-sub);
+            font-weight: 600;
             margin-bottom: 10px;
-            text-transform: uppercase;
+            backdrop-filter: blur(4px);
+        }
+
+        .header-card h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
             letter-spacing: 0.5px;
         }
 
-        /* 日数設定エリア */
-        .days-section {
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            padding: 22px;
+        .header-card p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .content-body {
+            padding: 20px;
+        }
+
+        /* 🚦 ステータスバナー（現場の今の状態を1秒で伝える） */
+        .status-banner {
+            background: #edf2f7;
+            border: 2px solid #cbd5e0;
             border-radius: 16px;
-            margin-bottom: 25px;
+            padding: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .status-banner.success { background: #f0fff4; border-color: #38a169; color: #22543d; }
+        .status-banner.warning { background: #fffaf0; border-color: #dd6b20; color: #7b341e; }
+        .status-banner.danger { background: #fff5f5; border-color: #e53e3e; color: #742a2a; }
+        
+        .status-banner .status-title {
+            font-size: 14px;
+            font-weight: 900;
+            margin-bottom: 2px;
+        }
+        .status-banner .status-desc {
+            font-size: 11px;
+            opacity: 0.85;
+        }
+
+        /* 期間設定グリッド */
+        .form-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            text-align: center;
-        }
-        .days-group label {
-            font-size: 12px;
-            color: var(--text-sub);
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
-        .days-group input {
-            width: 100%;
-            padding: 10px;
-            font-size: 17px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 700;
-            color: var(--primary);
-            background: #fff;
-            box-sizing: border-box;
-            transition: all 0.2s;
-        }
-        .days-group input:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        /* 金額・条件入力エリア */
-        .input-section {
-            background: #f1f5f9;
-            padding: 24px;
-            border-radius: 16px;
-            margin-bottom: 35px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-            gap: 15px;
-            border: 1px solid var(--border-color);
-        }
         .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .input-group label {
-            font-size: 12px;
-            color: var(--text-main);
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
-        .input-group input {
-            padding: 12px 14px;
-            font-size: 17px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            outline: none;
-            background: #fff;
-            text-align: right;
-            font-weight: 700;
-            color: var(--primary);
-            box-sizing: border-box;
-            transition: all 0.2s;
-        }
-        .input-group input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
-
-        /* ダッシュボードカード */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
-            gap: 15px;
-            margin-bottom: 35px;
-        }
-        .dash-card {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 20px 14px;
-            border-radius: 16px;
+            background: #fafbfc;
+            border: 1px solid #e1e4e8;
+            border-radius: 12px;
+            padding: 10px;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .dash-card .dash-label {
-            font-size: 11px;
-            color: var(--text-sub);
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-        .dash-card .dash-value {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-        .dash-card .dash-sub {
-            font-size: 11px;
-            margin-top: 8px;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-        .dash-card.highlight {
-            background: linear-gradient(135deg, #eff6ff, #dbeafe);
-            border-color: #93c5fd;
         }
 
-        /* 計算ステップカード */
-        .calc-steps {
+        .input-group.manual-input {
+            background: var(--manual-bg);
+            border: 2px solid var(--manual-border);
+            box-shadow: 0 2px 4px rgba(246, 173, 85, 0.15);
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 10px;
+            color: var(--text-sub);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .input-group.manual-input label {
+            color: #c05621;
+            font-weight: 700;
+        }
+
+        .input-group input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-main);
+            text-align: center;
+            outline: none;
+        }
+
+        /* セクションラベル */
+        .section-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #c05621;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* ヘルプガイド（アルバイト向け解説） */
+        .help-toggle {
+            font-size: 11px;
+            color: #3182ce;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .help-box {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 11px;
+            color: #2b6cb0;
+            margin-bottom: 14px;
+            display: none;
+            line-height: 1.5;
+        }
+        .help-box ul {
+            padding-left: 16px;
+            margin-top: 4px;
+        }
+
+        .input-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .step-card {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 20px 24px;
-            border-radius: 16px;
+
+        .list-item {
+            background: var(--manual-bg);
+            border: 2px solid var(--manual-border);
+            border-radius: 12px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-        }
-        .step-info {
-            display: flex;
-            flex-direction: column;
-        }
-        .step-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-sub);
-            margin-bottom: 4px;
-        }
-        .step-formula {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .step-result-box {
-            text-align: right;
-        }
-        .step-result-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-sub);
-            margin-bottom: 2px;
-        }
-        .step-result-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--danger);
+            box-shadow: 0 2px 4px rgba(246, 173, 85, 0.1);
         }
 
-        .support-msg {
-            margin-top: 35px;
-            text-align: center;
+        .list-item label {
             font-size: 13px;
-            color: var(--text-main);
-            background: #fefce8;
-            border: 1px solid #fef08a;
-            padding: 16px;
-            border-radius: 12px;
+            color: #7b341e;
             font-weight: 700;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+
+        .list-item input {
+            width: 140px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: right;
+            outline: none;
+            background: white;
+            color: #2d3748;
+        }
+
+        .list-item input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 75, 43, 0.15);
+        }
+
+        /* 結果サマリーボックス */
+        .result-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-row .label {
+            color: var(--text-sub);
+        }
+
+        .result-row .value {
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .alert-text {
+            color: #e53e3e;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* 📊 元の4つのステップカードレイアウト */
+        .step-section-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .step-cards-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .step-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .step-card-info {
+            font-size: 12px;
+            color: #718096;
+            line-height: 1.4;
+        }
+
+        .step-card-info .step-name {
+            font-weight: bold;
+            color: #2d3748;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .step-card-info .step-formula {
+            font-size: 11px;
+            color: #a0aec0;
+        }
+
+        .step-card-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3748;
+            text-align: right;
+        }
+
+        /* 🌟 最重要カード（達成に必要な1日の売上）の強力強調デザイン */
+        .step-card.highlight-target {
+            background: linear-gradient(135deg, #fff5f5, #ffe3e3);
+            border: 3px solid #ff4b2b;
+            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.2);
+        }
+
+        .step-card.highlight-target .step-card-info .step-name {
+            font-size: 13px;
+            color: #c53030;
+            font-weight: 900;
+        }
+
+        .step-card.highlight-target .step-card-value {
+            font-size: 20px;
+            color: #ff2a00;
+            font-weight: 900;
+        }
+
+        .footer-message {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-sub);
+            padding: 10px 0 0 0;
+            border-top: 1px solid #eee;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header-banner">
-        <h1>🔥 ★目標必達★ 🔥</h1>
-        <div class="subtitle">全員で目指す！リアルタイム売上・稼働シミュレーション</div>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header-card">
+            <div class="date-badge" id="current-date">日付を取得中...</div>
+            <h1>🔥 ★目標必達★ 🔥</h1>
+            <p>全員で目指す！リアルタイム売上・稼働シミュレーション</p>
+        </div>
+
+        <div class="content-body">
+            <!-- 🚦 リアルタイム・ステータスバナー（今の状態を1秒で共有） -->
+            <div id="status-banner" class="status-banner">
+                <div class="status-title" id="status-title">数値を入力してください</div>
+                <div class="status-desc" id="status-desc">目標・実績を入力するとチームの現在の状態が表示されます</div>
+            </div>
+
+            <!-- 期間設定 -->
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>今月日数 (自動)</label>
+                    <input type="number" id="total-days" value="30" readonly>
+                </div>
+                <div class="input-group manual-input">
+                    <label>✏️ 経過数 (日)</label>
+                    <input type="number" id="passed-days" value="">
+                </div>
+                <div class="input-group">
+                    <label>残り日数 (自動)</label>
+                    <input type="text" id="remaining-days" value="0日" readonly style="color: var(--accent-color);">
+                </div>
+            </div>
+
+            <!-- 目標・実績の入力（手動入力・空白） -->
+            <div class="section-label">
+                <span>👇 変更・入力する項目（手動）</span>
+                <span class="help-toggle" onclick="toggleHelp()">💡 入力項目の解説</span>
+            </div>
+
+            <!-- アルバイトスタッフ向けヘルプガイド -->
+            <div id="help-box" class="help-box">
+                <b>📖 スタッフ向け入力ガイド:</b>
+                <ul>
+                    <li><b>目標売上:</b> 今月お店全体で目指す総売上金額です。</li>
+                    <li><b>現状売上:</b> 今日までに実際に出ている総売上です。</li>
+                    <li><b>単価:</b> お客様1人あたりの平均単価（客単価など）です。</li>
+                    <li><b>回転率:</b> 1人あたりが対応できる件数やスタッフの稼働係数です。</li>
+                </ul>
+            </div>
+
+            <div class="input-list">
+                <div class="list-item">
+                    <label>目標売上 (円)</label>
+                    <input type="text" id="target-sales" value="">
+                </div>
+                <div class="list-item">
+                    <label>現状売上 (円)</label>
+                    <input type="text" id="current-sales" value="">
+                </div>
+                <div class="list-item">
+                    <label>単価 (円)</label>
+                    <input type="text" id="unit-price" value="">
+                </div>
+                <div class="list-item">
+                    <label>回転率</label>
+                    <input type="number" step="0.01" id="turnover-rate" value="">
+                </div>
+            </div>
+
+            <!-- 結果サマリー -->
+            <div class="section-label" style="color: #4a5568; margin-top: 10px;">📊 リアルタイム集計結果（自動）</div>
+            <div class="result-box">
+                <div class="result-row">
+                    <span class="label">現在の達成率</span>
+                    <span class="value" id="achievement-rate">0.0% <span id="pace-status" class="alert-text"></span></span>
+                </div>
+                <div class="result-row">
+                    <span class="label">現状の1日平均売上</span>
+                    <span class="value" id="avg-daily-sales">¥0</span>
+                </div>
+                <div class="result-row">
+                    <span class="label">現状の売上予測</span>
+                    <span class="value" id="forecast-sales">¥0</span>
+                </div>
+                <div class="result-row">
+                    <span class="label">目標との比較</span>
+                    <span class="value" id="sales-diff" style="color: #e53e3e;">¥0</span>
+                </div>
+                <div class="result-row">
+                    <span class="label">達成率予測</span>
+                    <span class="value" id="forecast-rate">0%</span>
+                </div>
+            </div>
+
+            <!-- 📊 元の4つのステップカードレイアウト -->
+            <div class="step-section-title">📈 必要数値の自動算出</div>
+            <div class="step-cards-wrapper">
+                <!-- カード1: 残り必要売上 -->
+                <div class="step-card">
+                    <div class="step-card-info">
+                        <span class="step-name">残り必要売上</span>
+                        <span class="step-formula">目標売上 - 現状売上</span>
+                    </div>
+                    <div class="step-card-value" id="calc-remaining-sales">¥0</div>
+                </div>
+
+                <!-- カード2: 達成に必要な1日の売上（最重要・強力強調） -->
+                <div class="step-card highlight-target">
+                    <div class="step-card-info">
+                        <span class="step-name">🔥 達成に必要な1日の売上</span>
+                        <span class="step-formula">残り必要売上 ÷ 残り日数</span>
+                    </div>
+                    <div class="step-card-value" id="calc-required-daily">¥0</div>
+                </div>
+
+                <!-- カード3: 1日に必要な本数 -->
+                <div class="step-card">
+                    <div class="step-card-info">
+                        <span class="step-name">1日に必要な本数</span>
+                        <span class="step-formula">必要1日売上 ÷ 単価</span>
+                    </div>
+                    <div class="step-card-value" id="calc-required-count">0本</div>
+                </div>
+
+                <!-- カード4: 1日に必要な出勤人数 -->
+                <div class="step-card">
+                    <div class="step-card-info">
+                        <span class="step-name">1日に必要な出勤人数</span>
+                        <span class="step-formula">1日必要本数 ÷ 回転率</span>
+                    </div>
+                    <div class="step-card-value" id="calc-required-staff">0人</div>
+                </div>
+            </div>
+
+            <!-- フッターメッセージ -->
+            <div class="footer-message">
+                🔥 チーム全員で数値を共有し、今月の目標を必ず達成させましょう！
+            </div>
+        </div>
     </div>
 
-    <!-- 日数設定エリア（デフォルト空欄） -->
-    <div class="section-title">📅 日数スケジュール設定</div>
-    <div class="days-section">
-        <div class="days-group">
-            <label for="totalDays">今月日数 (日)</label>
-            <input type="number" id="totalDays" placeholder="" oninput="calculate()">
-        </div>
-        <div class="days-group">
-            <label for="elapsedDays">経過数 (日)</label>
-            <input type="number" id="elapsedDays" placeholder="" oninput="calculate()">
-        </div>
-        <div class="days-group">
-            <label>残り日数 (自動)</label>
-            <div id="dispRemainingDays" style="font-size: 20px; font-weight: 800; color: var(--accent); padding-top: 8px;">0日</div>
-        </div>
-    </div>
-
-    <!-- 金額・条件入力エリア（デフォルト空欄） -->
-    <div class="section-title">⚙️ 目標・実績データ入力</div>
-    <div class="input-section">
-        <div class="input-group">
-            <label for="targetSales">目標売上 (円)</label>
-            <input type="text" id="targetSales" placeholder="" onfocus="unsetCurrency(this)" onblur="setCurrency(this)" oninput="calculate()">
-        </div>
-        <div class="input-group">
-            <label for="currentSales">現状売上 (円)</label>
-            <input type="text" id="currentSales" placeholder="" onfocus="unsetCurrency(this)" onblur="setCurrency(this)" oninput="calculate()">
-        </div>
-        <div class="input-group">
-            <label for="unitPrice">単価 (円)</label>
-            <input type="text" id="unitPrice" placeholder="" onfocus="unsetCurrency(this)" onblur="setCurrency(this)" oninput="calculate()">
-        </div>
-        <div class="input-group">
-            <label for="turnoverRate">回転率</label>
-            <input type="number" step="0.01" id="turnoverRate" placeholder="" oninput="calculate()">
-        </div>
-    </div>
-
-    <!-- ダッシュボードカード -->
-    <div class="section-title">📊 現状進捗ダッシュボード</div>
-    <div class="dashboard-grid">
-        <div class="dash-card">
-            <div class="dash-label">現在の達成率</div>
-            <div class="dash-value" id="dispAchievementRate">0.0%</div>
-            <div class="dash-sub" id="dispPaceStatus" style="color: var(--text-sub);">理想: 0.0%</div>
-        </div>
-        <div class="dash-card">
-            <div class="dash-label">現状の1日平均売上</div>
-            <div class="dash-value" id="dispDailyAvgSales">¥0</div>
-        </div>
-        <div class="dash-card highlight">
-            <div class="dash-label">現状の売上予測</div>
-            <div class="dash-value" id="dispLandingSales">¥0</div>
-        </div>
-        <div class="dash-card">
-            <div class="dash-label">目標との比較</div>
-            <div class="dash-value" id="dispDiffSales" style="color: var(--danger);">+¥0</div>
-        </div>
-        <div class="dash-card">
-            <div class="dash-label">達成率予測</div>
-            <div class="dash-value" id="dispLandingRate">0%</div>
-        </div>
-    </div>
-
-    <!-- 計算ステップカード -->
-    <div class="section-title">🚀 目標達成へのアクションプラン</div>
-    <div class="calc-steps">
-        <div class="step-card">
-            <div class="step-info">
-                <div class="step-title">STEP 1 : 残り必要売上の算出</div>
-                <div class="step-formula" id="dispSubFormula1">0 - 0</div>
-            </div>
-            <div class="step-result-box">
-                <div class="step-result-label">残り必要売上</div>
-                <div class="step-result-value" id="dispRemainder">¥0</div>
-            </div>
-        </div>
-
-        <div class="step-card">
-            <div class="step-info">
-                <div class="step-title">STEP 2 : 1日あたりの必要ペース</div>
-                <div class="step-formula" id="dispSubFormula2">0 ÷ 0日</div>
-            </div>
-            <div class="step-result-box">
-                <div class="step-result-label">達成に必要な1日の売上</div>
-                <div class="step-result-value" id="dispRequiredDailySales">¥0</div>
-            </div>
-        </div>
-
-        <div class="step-card">
-            <div class="step-info">
-                <div class="step-title">STEP 3 : 必要本数の換算</div>
-                <div class="step-formula" id="dispSubFormula3">0 ÷ 0</div>
-            </div>
-            <div class="step-result-box">
-                <div class="step-result-label">1日に必要な本数</div>
-                <div class="step-result-value" id="dispDailyCount" style="color: var(--primary);">0本</div>
-            </div>
-        </div>
-
-        <div class="step-card" style="border-left: 5px solid var(--success);">
-            <div class="step-info">
-                <div class="step-title">STEP 4 : 最終必要稼働人数</div>
-                <div class="step-formula" id="dispSubFormula4">0本 ÷ 0</div>
-            </div>
-            <div class="step-result-box">
-                <div class="step-result-label">1日に必要な出勤人数</div>
-                <div class="step-result-value" id="dispRequiredStaff" style="color: var(--success);">0人</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="support-msg">
-        🔥 チーム全員で数値を共有し、今月の目標を必ず達成させましょう！
-    </div>
-</div>
-
-<script>
-function formatCurrency(val) {
-    const num = parseFloat(val);
-    if (isNaN(num)) return '¥0';
-    return '¥' + num.toLocaleString();
-}
-
-function unsetCurrency(input) {
-    let val = input.value.replace(/[¥,]/g, '');
-    input.value = val;
-}
-
-function setCurrency(input) {
-    let raw = input.value.replace(/[¥,]/g, '').trim();
-    if (raw === '') {
-        input.value = '';
-    } else {
-        let val = parseFloat(raw);
-        if (!isNaN(val)) {
-            input.value = formatCurrency(val);
-        } else {
-            input.value = '';
+    <script>
+        // アルバイト向け解説ガイドの開閉
+        function toggleHelp() {
+            const box = document.getElementById('help-box');
+            box.style.display = box.style.display === 'block' ? 'none' : 'block';
         }
-    }
-    calculate();
-}
 
-function getVal(id) {
-    const el = document.getElementById(id);
-    let val = el.value.toString().replace(/[¥,]/g, '').trim();
-    if (val === '') return 0;
-    return parseFloat(val) || 0;
-}
-
-function calculate() {
-    const totalDays = parseFloat(document.getElementById('totalDays').value) || 0;
-    const elapsedDays = parseFloat(document.getElementById('elapsedDays').value) || 0;
-    const remainingDays = Math.max(0, totalDays - elapsedDays);
-    
-    const target = getVal('targetSales');
-    const current = getVal('currentSales');
-    const unitPrice = getVal('unitPrice');
-    const turnover = parseFloat(document.getElementById('turnoverRate').value) || 0;
-
-    document.getElementById('dispRemainingDays').innerText = remainingDays + '日';
-
-    const achievementRate = target > 0 ? (current / target) * 100 : 0;
-    const idealProgressRate = totalDays > 0 ? (elapsedDays / totalDays) * 100 : 0;
-
-    const paceStatusEl = document.getElementById('dispPaceStatus');
-    if (totalDays > 0 && elapsedDays > 0) {
-        if (achievementRate >= idealProgressRate) {
-            paceStatusEl.innerHTML = `理想: ${idealProgressRate.toFixed(1)}%<br><span style="color: var(--success);">（順調ペース 🚀）</span>`;
-        } else {
-            paceStatusEl.innerHTML = `理想: ${idealProgressRate.toFixed(1)}%<br><span style="color: var(--danger);">（要ペースアップ ⚠️）</span>`;
+        // 千円単位（千の位で四捨五入して下3桁を0にする）
+        function formatCurrencyRound1000(num) {
+            if (isNaN(num)) return '¥0';
+            const rounded = Math.round(num / 1000) * 1000;
+            return '¥' + rounded.toLocaleString();
         }
-    } else {
-        paceStatusEl.innerHTML = `理想: 0.0%`;
-    }
 
-    const dailyAvgSalesRaw = elapsedDays > 0 ? current / elapsedDays : 0;
-    const dailyAvgSales = Math.round(dailyAvgSalesRaw / 1000) * 1000;
+        // カンマ除去して数値に変換
+        function parseVal(valStr) {
+            if (!valStr) return 0;
+            const cleaned = String(valStr).replace(/,/g, '').trim();
+            const num = parseFloat(cleaned);
+            return isNaN(num) ? 0 : num;
+        }
 
-    const landingSalesRaw = dailyAvgSalesRaw * totalDays;
-    const landingSales = Math.round(landingSalesRaw / 1000) * 1000;
+        // 手動入力欄のカンマ自動挿入
+        document.querySelectorAll('.list-item input[type="text"]').forEach(input => {
+            input.addEventListener('input', (e) => {
+                let rawVal = e.target.value.replace(/,/g, '');
+                if (!isNaN(rawVal) && rawVal !== '') {
+                    let parts = rawVal.split('.');
+                    parts[0] = Number(parts[0]).toLocaleString();
+                    e.target.value = parts.join('.');
+                }
+                updateSimulation();
+            });
+        });
 
-    const diffSalesRaw = landingSales - target;
-    const diffSales = Math.round(diffSalesRaw / 1000) * 1000;
+        // 日付と今月日数を自動セット
+        function initDateInfo() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const date = now.getDate();
+            const dayOfWeekList = ['日', '月', '火', '水', '木', '金', '土'];
+            const dayOfWeek = dayOfWeekList[now.getDay()];
 
-    const landingRate = target > 0 ? (landingSales / target) * 100 : 0;
-    const remainder = Math.max(0, target - current);
+            const dateBadge = document.getElementById('current-date');
+            if (dateBadge) {
+                dateBadge.textContent = `${year}年${month}月${date}日（${dayOfWeek}）`;
+            }
 
-    const requiredDailySalesRaw = remainingDays > 0 ? remainder / remainingDays : 0;
-    const requiredDailySales = Math.round(requiredDailySalesRaw / 1000) * 1000;
+            const totalDaysInMonth = new Date(year, month, 0).getDate();
+            const totalDaysInput = document.getElementById('total-days');
+            if (totalDaysInput) {
+                totalDaysInput.value = totalDaysInMonth;
+            }
+        }
 
-    const dailyCountRound = unitPrice > 0 ? Math.round(requiredDailySales / unitPrice) : 0;
-    const requiredStaffExact = turnover > 0 ? dailyCountRound / turnover : 0;
-    const requiredStaffRound = Math.ceil(requiredStaffExact);
+        // メイン計算ロジック
+        function updateSimulation() {
+            const totalDaysInput = document.getElementById('total-days');
+            const totalDays = totalDaysInput && totalDaysInput.value !== "" ? parseFloat(totalDaysInput.value) : 30;
+            
+            const passedDays = parseVal(document.getElementById('passed-days').value);
+            const targetSales = parseVal(document.getElementById('target-sales').value);
+            const currentSales = parseVal(document.getElementById('current-sales').value);
+            const unitPrice = parseVal(document.getElementById('unit-price').value);
+            const turnoverRate = parseVal(document.getElementById('turnover-rate').value);
 
-    // 画面反映
-    document.getElementById('dispAchievementRate').innerText = achievementRate.toFixed(1) + '%';
-    document.getElementById('dispDailyAvgSales').innerText = formatCurrency(dailyAvgSales);
-    document.getElementById('dispLandingSales').innerText = formatCurrency(landingSales);
-    
-    const diffElement = document.getElementById('dispDiffSales');
-    diffElement.innerText = (diffSales >= 0 ? '+' : '') + formatCurrency(diffSales);
-    diffElement.style.color = diffSales >= 0 ? 'var(--success)' : 'var(--danger)';
+            const remainingDays = Math.max(0, totalDays - passedDays);
+            document.getElementById('remaining-days').value = remainingDays + '日';
 
-    document.getElementById('dispLandingRate').innerText = landingRate.toFixed(0) + '%';
+            // ステータスバナーの更新
+            const banner = document.getElementById('status-banner');
+            const statusTitle = document.getElementById('status-title');
+            const statusDesc = document.getElementById('status-desc');
 
-    document.getElementById('dispSubFormula1').innerText = (target > 0 || current > 0) ? (formatCurrency(target) + ' - ' + formatCurrency(current)) : '0 - 0';
-    document.getElementById('dispRemainder').innerText = formatCurrency(remainder);
+            if (targetSales === 0) {
+                banner.className = "status-banner";
+                statusTitle.textContent = "⏳ 目標数値を入力してください";
+                statusDesc.textContent = "目標売上と現状売上を入れると、現在のチームの状況が判定されます";
+            } else {
+                const achievementRate = (currentSales / targetSales) * 100;
+                const idealRate = totalDays > 0 ? (passedDays / totalDays) * 100 : 0;
+                
+                if (achievementRate >= idealRate) {
+                    banner.className = "status-banner success";
+                    statusTitle.textContent = "✨ 順調ペース！この調子で目標を掴み取ろう！";
+                    statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペースクリア中 👍）`;
+                } else if (achievementRate >= idealRate * 0.85) {
+                    banner.className = "status-banner warning";
+                    statusTitle.textContent = "⚠️ 少しペースアップが必要です！";
+                    statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペース ${idealRate.toFixed(1)}%に対してやや遅れ）`;
+                } else {
+                    banner.className = "status-banner danger";
+                    statusTitle.textContent = "🔥 大ピンチ！みんなで力を合わせて巻き返そう！";
+                    statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （ここからの爆発的な巻き返しが鍵です！）`;
+                }
+            }
 
-    document.getElementById('dispSubFormula2').innerText = (remainder > 0 && remainingDays > 0) ? (formatCurrency(remainder) + ' ÷ ' + remainingDays + '日') : '0 ÷ 0日';
-    document.getElementById('dispRequiredDailySales').innerText = formatCurrency(requiredDailySales);
+            // 達成率
+            const achievementRate = targetSales > 0 ? (currentSales / targetSales) * 100 : 0;
+            const idealRate = totalDays > 0 ? (passedDays / totalDays) * 100 : 0;
+            
+            let paceHtml = '';
+            if (targetSales > 0 && passedDays > 0) {
+                paceHtml = `（理想: ${idealRate.toFixed(1)}%`;
+                if (achievementRate < idealRate) {
+                    paceHtml += ` <span class="alert-text">⚠️ 要ペースアップ</span>）`;
+                } else {
+                    paceHtml += ` 👍 順調）`;
+                }
+            }
+            document.getElementById('achievement-rate').innerHTML = `${achievementRate.toFixed(1)}% ${paceHtml}`;
 
-    document.getElementById('dispSubFormula3').innerText = (requiredDailySales > 0 && unitPrice > 0) ? (formatCurrency(requiredDailySales) + ' ÷ ' + formatCurrency(unitPrice)) : '0 ÷ 0';
-    document.getElementById('dispDailyCount').innerText = dailyCountRound + '本';
+            // 現状の1日平均売上（千円単位四捨五入）
+            const avgDailySales = passedDays > 0 ? currentSales / passedDays : 0;
+            document.getElementById('avg-daily-sales').textContent = formatCurrencyRound1000(avgDailySales);
 
-    document.getElementById('dispSubFormula4').innerText = (dailyCountRound > 0 && turnover > 0) ? (dailyCountRound + '本 ÷ ' + turnover) : '0本 ÷ 0';
-    document.getElementById('dispRequiredStaff').innerText = requiredStaffRound + '人';
-}
-</script>
+            // 現状の売上予測（千円単位四捨五入）
+            const forecastSales = avgDailySales * totalDays;
+            document.getElementById('forecast-sales').textContent = formatCurrencyRound1000(forecastSales);
 
+            // 目標との比較（予測売上 － 目標売上）を千円単位四捨五入
+            const salesDiff = forecastSales - targetSales;
+            const roundedDiff = Math.round(salesDiff / 1000) * 1000;
+            const diffEl = document.getElementById('sales-diff');
+            
+            if (roundedDiff >= 0) {
+                diffEl.textContent = '+¥' + roundedDiff.toLocaleString();
+                diffEl.style.color = '#38a169';
+            } else {
+                diffEl.textContent = '-¥' + Math.abs(roundedDiff).toLocaleString();
+                diffEl.style.color = '#e53e3e';
+            }
+
+            // 達成率予測
+            const forecastRate = targetSales > 0 ? (forecastSales / targetSales) * 100 : 0;
+            document.getElementById('forecast-rate').textContent = Math.round(forecastRate) + '%';
+
+            // 必要数値の算出（千円単位四捨五入）
+            const remainingSales = Math.max(0, targetSales - currentSales);
+            document.getElementById('calc-remaining-sales').textContent = formatCurrencyRound1000(remainingSales);
+
+            const requiredDailySales = remainingDays > 0 ? remainingSales / remainingDays : 0;
+            document.getElementById('calc-required-daily').textContent = formatCurrencyRound1000(requiredDailySales);
+
+            const requiredCount = unitPrice > 0 ? requiredDailySales / unitPrice : 0;
+            document.getElementById('calc-required-count').textContent = Math.round(requiredCount).toLocaleString() + '本';
+
+            const requiredStaff = turnoverRate > 0 ? requiredCount / turnoverRate : 0;
+            document.getElementById('calc-required-staff').textContent = Math.round(requiredStaff).toLocaleString() + '人';
+        }
+
+        // 初期化とイベント登録
+        initDateInfo();
+        updateSimulation();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initDateInfo();
+            updateSimulation();
+
+            const inputs = document.querySelectorAll('.content-body input');
+            inputs.forEach(input => {
+                input.addEventListener('input', updateSimulation);
+            });
+        });
+
+        window.addEventListener('load', () => {
+            initDateInfo();
+            updateSimulation();
+        });
+    </script>
 </body>
 </html>
