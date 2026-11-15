@@ -6,12 +6,13 @@
     <title>🔥 ★目標必達★ リアルタイムシミュレーション</title>
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #FF416C, #FF4B2B);
+            /* 🌟 一番上の背景色をフレッシュな緑系グラデーション */
+            --primary-gradient: linear-gradient(135deg, #11998e, #38ef7d);
             --bg-color: #f4f6f9;
             --card-bg: #ffffff;
             --text-main: #333333;
             --text-sub: #666666;
-            --accent-color: #FF4B2B;
+            --accent-color: #11998e;
             --manual-bg: #fffdf5; 
             --manual-border: #f6ad55; 
         }
@@ -41,7 +42,7 @@
             margin-bottom: 24px;
         }
 
-        /* ヘッダーセクション */
+        /* ヘッダーセクション（緑系） */
         .header-card {
             background: var(--primary-gradient);
             color: white;
@@ -149,7 +150,7 @@
         .section-label {
             font-size: 12px;
             font-weight: bold;
-            color: #c05621;
+            color: #11998e;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -217,8 +218,8 @@
         }
 
         .list-item input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 75, 43, 0.15);
+            border-color: #11998e;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.15);
         }
 
         /* 結果サマリーボックス */
@@ -253,7 +254,6 @@
             text-align: right;
         }
 
-        /* 達成率の行専用スタイル（改行を入れて見栄え良くする） */
         .achievement-value-container {
             display: flex;
             flex-direction: column;
@@ -359,10 +359,10 @@
 <body>
 
     <div class="container">
-        <!-- ヘッダー -->
+        <!-- ヘッダー（緑系のグラデーション） -->
         <div class="header-card">
             <div class="date-badge" id="current-date">日付を取得中...</div>
-            <h1>🔥 ★目標必達★ 🔥</h1>
+            <h1>🌱 ★目標必達★ 🌱</h1>
             <p>全員で目指す！リアルタイム売上・稼働シミュレーション</p>
         </div>
 
@@ -385,7 +385,7 @@
                 </div>
                 <div class="input-group">
                     <label>残り日数 (自動)</label>
-                    <input type="text" id="remaining-days" value="0日" readonly style="color: var(--accent-color);">
+                    <input type="text" id="remaining-days" value="0日" readonly style="color: #11998e;">
                 </div>
             </div>
 
@@ -429,7 +429,6 @@
             <div class="result-box">
                 <div class="result-row">
                     <span class="label">現在の達成率</span>
-                    <!-- 💡 改行を入れて見栄えを良くしたコンテナ -->
                     <div class="achievement-value-container">
                         <span class="value" id="achievement-rate-main">0.0%</span>
                         <span id="pace-status"></span>
@@ -491,7 +490,7 @@
 
             <!-- フッターメッセージ -->
             <div class="footer-message">
-                🔥 チーム全員で数値を共有し、今月の目標を必ず達成させましょう！
+                🌱 チーム全員で数値を共有し、今月の目標を必ず達成させましょう！
             </div>
         </div>
     </div>
