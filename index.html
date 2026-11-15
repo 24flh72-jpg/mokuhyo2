@@ -235,7 +235,7 @@
             justify-content: space-between;
             align-items: center;
             font-size: 14px;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px dashed #e2e8f0;
         }
 
@@ -250,12 +250,29 @@
         .result-row .value {
             font-weight: bold;
             color: var(--text-main);
+            text-align: right;
+        }
+
+        /* 達成率の行専用スタイル（改行を入れて見栄え良くする） */
+        .achievement-value-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
         }
 
         .alert-text {
             color: #e53e3e;
             font-size: 12px;
             font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .success-text {
+            color: #38a169;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 2px;
         }
 
         /* ステップカードレイアウト */
@@ -412,7 +429,11 @@
             <div class="result-box">
                 <div class="result-row">
                     <span class="label">現在の達成率</span>
-                    <span class="value" id="achievement-rate">0.0% <span id="pace-status" class="alert-text"></span></span>
+                    <!-- 💡 改行を入れて見栄えを良くしたコンテナ -->
+                    <div class="achievement-value-container">
+                        <span class="value" id="achievement-rate-main">0.0%</span>
+                        <span id="pace-status"></span>
+                    </div>
                 </div>
                 <div class="result-row">
                     <span class="label">現状の1日平均売上</span>
@@ -481,7 +502,7 @@
             box.style.display = box.style.display === 'block' ? 'none' : 'block';
         }
 
-        // 千円単位（千の位で四捨五入して下3桁を0にする）＋カンマ区切り
+        // 千円単位（千の位で四捨五入して下3桁を0にする）
         function formatCurrencyRound1000(num) {
             if (isNaN(num) || !isFinite(num)) return '¥0';
             const rounded = Math.round(num / 1000) * 1000;
@@ -564,17 +585,23 @@
             const achievementRate = targetSales > 0 ? (currentSales / targetSales) * 100 : 0;
             const idealRate = totalDays > 0 ? (passedDays / totalDays) * 100 : 0;
             
-            let paceHtml = '';
-            if (targetSales > 0 && passedDays > 0) {
-                paceHtml = `（理想: ${idealRate.toFixed(1)}%`;
-                if (achievementRate < idealRate) {
-                    paceHtml += ` <span class="alert-text">⚠️ 要ペースアップ</span>）`;
+            const achMainEl = document.getElementById('achievement-rate-main');
+            if (achMainEl) achMainEl.textContent = achievementRate.toFixed(1) + '%';
+
+            const paceEl = document.getElementById('pace-status');
+            if (paceEl) {
+                if (targetSales > 0 && passedDays > 0) {
+                    if (achievementRate < idealRate) {
+                        paceEl.className = "alert-text";
+                        paceEl.textContent = `（理想: ${idealRate.toFixed(1)}% ⚠️ 要ペースアップ）`;
+                    } else {
+                        paceEl.className = "success-text";
+                        paceEl.textContent = `（理想: ${idealRate.toFixed(1)}% 👍 順調）`;
+                    }
                 } else {
-                    paceHtml += ` 👍 順調）`;
+                    paceEl.textContent = "";
                 }
             }
-            const achEl = document.getElementById('achievement-rate');
-            if (achEl) achEl.innerHTML = `${achievementRate.toFixed(1)}% ${paceHtml}`;
 
             // 現状の1日平均売上
             const avgDailySales = passedDays > 0 ? currentSales / passedDays : 0;
@@ -636,7 +663,6 @@
             });
         });
 
-        // 念のためウィンドウロード時も
         window.addEventListener('load', () => {
             initDateInfo();
             updateSimulation();
