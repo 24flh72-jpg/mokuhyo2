@@ -76,7 +76,7 @@
             padding: 20px;
         }
 
-        /* 🚦 ステータスバナー（現場の今の状態を1秒で伝える） */
+        /* ステータスバナー */
         .status-banner {
             background: #edf2f7;
             border: 2px solid #cbd5e0;
@@ -84,7 +84,6 @@
             padding: 14px;
             text-align: center;
             margin-bottom: 20px;
-            transition: all 0.3s ease;
         }
         .status-banner.success { background: #f0fff4; border-color: #38a169; color: #22543d; }
         .status-banner.warning { background: #fffaf0; border-color: #dd6b20; color: #7b341e; }
@@ -157,7 +156,6 @@
             justify-content: space-between;
         }
 
-        /* ヘルプガイド（アルバイト向け解説） */
         .help-toggle {
             font-size: 11px;
             color: #3182ce;
@@ -260,7 +258,7 @@
             font-weight: bold;
         }
 
-        /* 📊 元の4つのステップカードレイアウト */
+        /* ステップカードレイアウト */
         .step-section-title {
             font-size: 12px;
             font-weight: bold;
@@ -314,7 +312,6 @@
             text-align: right;
         }
 
-        /* 🌟 最重要カード（達成に必要な1日の売上）の強力強調デザイン */
         .step-card.highlight-target {
             background: linear-gradient(135deg, #fff5f5, #ffe3e3);
             border: 3px solid #ff4b2b;
@@ -353,21 +350,21 @@
         </div>
 
         <div class="content-body">
-            <!-- 🚦 リアルタイム・ステータスバナー（今の状態を1秒で共有） -->
+            <!-- ステータスバナー -->
             <div id="status-banner" class="status-banner">
                 <div class="status-title" id="status-title">数値を入力してください</div>
-                <div class="status-desc" id="status-desc">目標・実績を入力するとチームの現在の状態が表示されます</div>
+                <div class="status-desc" id="status-desc">目標売上と現状売上を入れると、現在のチームの状況が判定されます</div>
             </div>
 
             <!-- 期間設定 -->
             <div class="form-grid">
                 <div class="input-group">
                     <label>今月日数 (自動)</label>
-                    <input type="number" id="total-days" value="30" readonly>
+                    <input type="number" id="total-days" readonly>
                 </div>
                 <div class="input-group manual-input">
                     <label>✏️ 経過数 (日)</label>
-                    <input type="number" id="passed-days" value="">
+                    <input type="number" id="passed-days" placeholder="">
                 </div>
                 <div class="input-group">
                     <label>残り日数 (自動)</label>
@@ -375,39 +372,38 @@
                 </div>
             </div>
 
-            <!-- 目標・実績の入力（手動入力・空白） -->
+            <!-- 目標・実績の入力 -->
             <div class="section-label">
                 <span>👇 変更・入力する項目（手動）</span>
                 <span class="help-toggle" onclick="toggleHelp()">💡 入力項目の解説</span>
             </div>
 
-            <!-- アルバイトスタッフ向けヘルプガイド -->
             <div id="help-box" class="help-box">
                 <b>📖 スタッフ向け入力ガイド:</b>
                 <ul>
                     <li><b>目標売上:</b> 今月お店全体で目指す総売上金額です。</li>
                     <li><b>現状売上:</b> 今日までに実際に出ている総売上です。</li>
-                    <li><b>単価:</b> お客様1人あたりの平均単価（客単価など）です。</li>
-                    <li><b>回転率:</b> 1人あたりが対応できる件数やスタッフの稼働係数です。</li>
+                    <li><b>単価:</b> お客様1人あたりの平均単価です。</li>
+                    <li><b>回転率:</b> 1人あたりが対応できる件数や係数です。</li>
                 </ul>
             </div>
 
             <div class="input-list">
                 <div class="list-item">
                     <label>目標売上 (円)</label>
-                    <input type="text" id="target-sales" value="">
+                    <input type="number" id="target-sales" placeholder="">
                 </div>
                 <div class="list-item">
                     <label>現状売上 (円)</label>
-                    <input type="text" id="current-sales" value="">
+                    <input type="number" id="current-sales" placeholder="">
                 </div>
                 <div class="list-item">
                     <label>単価 (円)</label>
-                    <input type="text" id="unit-price" value="">
+                    <input type="number" id="unit-price" placeholder="">
                 </div>
                 <div class="list-item">
                     <label>回転率</label>
-                    <input type="number" step="0.01" id="turnover-rate" value="">
+                    <input type="number" step="0.01" id="turnover-rate" placeholder="">
                 </div>
             </div>
 
@@ -436,10 +432,9 @@
                 </div>
             </div>
 
-            <!-- 📊 元の4つのステップカードレイアウト -->
+            <!-- ステップカードレイアウト -->
             <div class="step-section-title">📈 必要数値の自動算出</div>
             <div class="step-cards-wrapper">
-                <!-- カード1: 残り必要売上 -->
                 <div class="step-card">
                     <div class="step-card-info">
                         <span class="step-name">残り必要売上</span>
@@ -448,7 +443,6 @@
                     <div class="step-card-value" id="calc-remaining-sales">¥0</div>
                 </div>
 
-                <!-- カード2: 達成に必要な1日の売上（最重要・強力強調） -->
                 <div class="step-card highlight-target">
                     <div class="step-card-info">
                         <span class="step-name">🔥 達成に必要な1日の売上</span>
@@ -457,7 +451,6 @@
                     <div class="step-card-value" id="calc-required-daily">¥0</div>
                 </div>
 
-                <!-- カード3: 1日に必要な本数 -->
                 <div class="step-card">
                     <div class="step-card-info">
                         <span class="step-name">1日に必要な本数</span>
@@ -466,7 +459,6 @@
                     <div class="step-card-value" id="calc-required-count">0本</div>
                 </div>
 
-                <!-- カード4: 1日に必要な出勤人数 -->
                 <div class="step-card">
                     <div class="step-card-info">
                         <span class="step-name">1日に必要な出勤人数</span>
@@ -484,41 +476,27 @@
     </div>
 
     <script>
-        // アルバイト向け解説ガイドの開閉
         function toggleHelp() {
             const box = document.getElementById('help-box');
             box.style.display = box.style.display === 'block' ? 'none' : 'block';
         }
 
-        // 千円単位（千の位で四捨五入して下3桁を0にする）
+        // 千円単位（千の位で四捨五入して下3桁を0にする）＋カンマ区切り
         function formatCurrencyRound1000(num) {
-            if (isNaN(num)) return '¥0';
+            if (isNaN(num) || !isFinite(num)) return '¥0';
             const rounded = Math.round(num / 1000) * 1000;
             return '¥' + rounded.toLocaleString();
         }
 
-        // カンマ除去して数値に変換
-        function parseVal(valStr) {
-            if (!valStr) return 0;
-            const cleaned = String(valStr).replace(/,/g, '').trim();
-            const num = parseFloat(cleaned);
-            return isNaN(num) ? 0 : num;
+        // 入力値の安全な数値変換
+        function parseVal(id) {
+            const el = document.getElementById(id);
+            if (!el || el.value === '') return 0;
+            const val = parseFloat(el.value);
+            return isNaN(val) ? 0 : val;
         }
 
-        // 手動入力欄のカンマ自動挿入
-        document.querySelectorAll('.list-item input[type="text"]').forEach(input => {
-            input.addEventListener('input', (e) => {
-                let rawVal = e.target.value.replace(/,/g, '');
-                if (!isNaN(rawVal) && rawVal !== '') {
-                    let parts = rawVal.split('.');
-                    parts[0] = Number(parts[0]).toLocaleString();
-                    e.target.value = parts.join('.');
-                }
-                updateSimulation();
-            });
-        });
-
-        // 日付と今月日数を自動セット
+        // 初期化（日付と今月日数）
         function initDateInfo() {
             const now = new Date();
             const year = now.getFullYear();
@@ -541,17 +519,18 @@
 
         // メイン計算ロジック
         function updateSimulation() {
-            const totalDaysInput = document.getElementById('total-days');
-            const totalDays = totalDaysInput && totalDaysInput.value !== "" ? parseFloat(totalDaysInput.value) : 30;
-            
-            const passedDays = parseVal(document.getElementById('passed-days').value);
-            const targetSales = parseVal(document.getElementById('target-sales').value);
-            const currentSales = parseVal(document.getElementById('current-sales').value);
-            const unitPrice = parseVal(document.getElementById('unit-price').value);
-            const turnoverRate = parseVal(document.getElementById('turnover-rate').value);
+            const totalDays = parseVal('total-days') || 30;
+            const passedDays = parseVal('passed-days');
+            const targetSales = parseVal('target-sales');
+            const currentSales = parseVal('current-sales');
+            const unitPrice = parseVal('unit-price');
+            const turnoverRate = parseVal('turnover-rate');
 
             const remainingDays = Math.max(0, totalDays - passedDays);
-            document.getElementById('remaining-days').value = remainingDays + '日';
+            const remainingDaysInput = document.getElementById('remaining-days');
+            if (remainingDaysInput) {
+                remainingDaysInput.value = remainingDays + '日';
+            }
 
             // ステータスバナーの更新
             const banner = document.getElementById('status-banner');
@@ -559,25 +538,25 @@
             const statusDesc = document.getElementById('status-desc');
 
             if (targetSales === 0) {
-                banner.className = "status-banner";
-                statusTitle.textContent = "⏳ 目標数値を入力してください";
-                statusDesc.textContent = "目標売上と現状売上を入れると、現在のチームの状況が判定されます";
+                if (banner) banner.className = "status-banner";
+                if (statusTitle) statusTitle.textContent = "⏳ 目標数値を入力してください";
+                if (statusDesc) statusDesc.textContent = "目標売上と現状売上を入れると、現在のチームの状況が判定されます";
             } else {
                 const achievementRate = (currentSales / targetSales) * 100;
                 const idealRate = totalDays > 0 ? (passedDays / totalDays) * 100 : 0;
                 
                 if (achievementRate >= idealRate) {
-                    banner.className = "status-banner success";
-                    statusTitle.textContent = "✨ 順調ペース！この調子で目標を掴み取ろう！";
-                    statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペースクリア中 👍）`;
+                    if (banner) banner.className = "status-banner success";
+                    if (statusTitle) statusTitle.textContent = "✨ 順調ペース！この調子で目標を掴み取ろう！";
+                    if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペースクリア中 👍）`;
                 } else if (achievementRate >= idealRate * 0.85) {
-                    banner.className = "status-banner warning";
-                    statusTitle.textContent = "⚠️ 少しペースアップが必要です！";
-                    statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペース ${idealRate.toFixed(1)}%に対してやや遅れ）`;
+                    if (banner) banner.className = "status-banner warning";
+                    if (statusTitle) statusTitle.textContent = "⚠️ 少しペースアップが必要です！";
+                    if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペース ${idealRate.toFixed(1)}%に対してやや遅れ）`;
                 } else {
-                    banner.className = "status-banner danger";
-                    statusTitle.textContent = "🔥 大ピンチ！みんなで力を合わせて巻き返そう！";
-                    statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （ここからの爆発的な巻き返しが鍵です！）`;
+                    if (banner) banner.className = "status-banner danger";
+                    if (statusTitle) statusTitle.textContent = "🔥 大ピンチ！みんなで力を合わせて巻き返そう！";
+                    if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （ここからの爆発的な巻き返しが鍵です！）`;
                 }
             }
 
@@ -594,51 +573,58 @@
                     paceHtml += ` 👍 順調）`;
                 }
             }
-            document.getElementById('achievement-rate').innerHTML = `${achievementRate.toFixed(1)}% ${paceHtml}`;
+            const achEl = document.getElementById('achievement-rate');
+            if (achEl) achEl.innerHTML = `${achievementRate.toFixed(1)}% ${paceHtml}`;
 
-            // 現状の1日平均売上（千円単位四捨五入）
+            // 現状の1日平均売上
             const avgDailySales = passedDays > 0 ? currentSales / passedDays : 0;
-            document.getElementById('avg-daily-sales').textContent = formatCurrencyRound1000(avgDailySales);
+            const avgEl = document.getElementById('avg-daily-sales');
+            if (avgEl) avgEl.textContent = formatCurrencyRound1000(avgDailySales);
 
-            // 現状の売上予測（千円単位四捨五入）
+            // 現状の売上予測
             const forecastSales = avgDailySales * totalDays;
-            document.getElementById('forecast-sales').textContent = formatCurrencyRound1000(forecastSales);
+            const foreEl = document.getElementById('forecast-sales');
+            if (foreEl) foreEl.textContent = formatCurrencyRound1000(forecastSales);
 
-            // 目標との比較（予測売上 － 目標売上）を千円単位四捨五入
+            // 目標との比較（予測売上 － 目標売上）
             const salesDiff = forecastSales - targetSales;
             const roundedDiff = Math.round(salesDiff / 1000) * 1000;
             const diffEl = document.getElementById('sales-diff');
             
-            if (roundedDiff >= 0) {
-                diffEl.textContent = '+¥' + roundedDiff.toLocaleString();
-                diffEl.style.color = '#38a169';
-            } else {
-                diffEl.textContent = '-¥' + Math.abs(roundedDiff).toLocaleString();
-                diffEl.style.color = '#e53e3e';
+            if (diffEl) {
+                if (roundedDiff >= 0) {
+                    diffEl.textContent = '+¥' + roundedDiff.toLocaleString();
+                    diffEl.style.color = '#38a169';
+                } else {
+                    diffEl.textContent = '-¥' + Math.abs(roundedDiff).toLocaleString();
+                    diffEl.style.color = '#e53e3e';
+                }
             }
 
             // 達成率予測
             const forecastRate = targetSales > 0 ? (forecastSales / targetSales) * 100 : 0;
-            document.getElementById('forecast-rate').textContent = Math.round(forecastRate) + '%';
+            const foreRateEl = document.getElementById('forecast-rate');
+            if (foreRateEl) foreRateEl.textContent = Math.round(forecastRate) + '%';
 
-            // 必要数値の算出（千円単位四捨五入）
+            // 必要数値の算出
             const remainingSales = Math.max(0, targetSales - currentSales);
-            document.getElementById('calc-remaining-sales').textContent = formatCurrencyRound1000(remainingSales);
+            const remSalesEl = document.getElementById('calc-remaining-sales');
+            if (remSalesEl) remSalesEl.textContent = formatCurrencyRound1000(remainingSales);
 
             const requiredDailySales = remainingDays > 0 ? remainingSales / remainingDays : 0;
-            document.getElementById('calc-required-daily').textContent = formatCurrencyRound1000(requiredDailySales);
+            const reqDailyEl = document.getElementById('calc-required-daily');
+            if (reqDailyEl) reqDailyEl.textContent = formatCurrencyRound1000(requiredDailySales);
 
             const requiredCount = unitPrice > 0 ? requiredDailySales / unitPrice : 0;
-            document.getElementById('calc-required-count').textContent = Math.round(requiredCount).toLocaleString() + '本';
+            const reqCountEl = document.getElementById('calc-required-count');
+            if (reqCountEl) reqCountEl.textContent = Math.round(requiredCount).toLocaleString() + '本';
 
             const requiredStaff = turnoverRate > 0 ? requiredCount / turnoverRate : 0;
-            document.getElementById('calc-required-staff').textContent = Math.round(requiredStaff).toLocaleString() + '人';
+            const reqStaffEl = document.getElementById('calc-required-staff');
+            if (reqStaffEl) reqStaffEl.textContent = Math.round(requiredStaff).toLocaleString() + '人';
         }
 
-        // 初期化とイベント登録
-        initDateInfo();
-        updateSimulation();
-
+        // イベント設定と初期化
         window.addEventListener('DOMContentLoaded', () => {
             initDateInfo();
             updateSimulation();
@@ -646,9 +632,11 @@
             const inputs = document.querySelectorAll('.content-body input');
             inputs.forEach(input => {
                 input.addEventListener('input', updateSimulation);
+                input.addEventListener('change', updateSimulation);
             });
         });
 
+        // 念のためウィンドウロード時も
         window.addEventListener('load', () => {
             initDateInfo();
             updateSimulation();
