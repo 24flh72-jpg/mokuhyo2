@@ -146,7 +146,7 @@
             outline: none;
         }
 
-        /* セクションラベル */
+        /* セクションラベル周りの調整 */
         .section-label {
             font-size: 12px;
             font-weight: bold;
@@ -155,16 +155,20 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            white-space: nowrap; /* ラベルが意図せず改行されるのを防止 */
         }
 
-        /* オールクリアボタンのスタイル */
+        /* オールクリアボタン（アイコンのみ・コンパクト化） */
         .all-clear-btn {
             background-color: #f7fafc;
             color: #4a5568;
             border: 1px solid #cbd5e0;
-            padding: 3px 10px;
-            font-size: 11px;
-            font-weight: bold;
+            width: 30px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
@@ -410,8 +414,8 @@
             <!-- 目標・実績の入力 -->
             <div class="section-label">
                 <span>👇 変更・入力する項目（手動）</span>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <button type="button" class="all-clear-btn" onclick="allClearInputs()">🔄 オールクリア</button>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <button type="button" class="all-clear-btn" onclick="allClearInputs()" title="オールクリア">🔄</button>
                     <span class="help-toggle" onclick="toggleHelp()">💡 入力項目の解説</span>
                 </div>
             </div>
