@@ -93,6 +93,7 @@
             margin-bottom: 20px;
         }
         .status-banner.success { background: #f0fff4; border-color: #38a169; color: #22543d; }
+        .status-banner.info { background: #ebf8ff; border-color: #3182ce; color: #2b6cb0; }
         .status-banner.warning { background: #fffaf0; border-color: #dd6b20; color: #7b341e; }
         .status-banner.danger { background: #fff5f5; border-color: #e53e3e; color: #742a2a; }
         
@@ -559,7 +560,7 @@
                 document.getElementById('current-sales').value = '';
                 document.getElementById('unit-price').value = '';
                 document.getElementById('turnover-rate').value = '';
-                updateSimulation(); // クリアと同時に計算結果も更新
+                updateSimulation();
             }
         }
 
@@ -614,7 +615,7 @@
                 remainingDaysInput.value = remainingDays + '日';
             }
 
-            // ステータスバナーの更新
+            // ステータスバナーの更新（細分化した4段階設定）
             const banner = document.getElementById('status-banner');
             const statusTitle = document.getElementById('status-title');
             const statusDesc = document.getElementById('status-desc');
@@ -622,22 +623,30 @@
             if (targetSales === 0) {
                 if (banner) banner.className = "status-banner";
                 if (statusTitle) statusTitle.textContent = "⏳ 目標数値を入力してください";
-                if (statusDesc) statusDesc.textContent = "目標売上と現状売上を入れると、現在のチームの状況が判定されます";
+                if (statusDesc) statusDesc.textContent = "目標売上と現状売上を入れると、現在の状況が判定されます";
             } else {
                 const achievementRate = (currentSales / targetSales) * 100;
                 const idealRate = totalDays > 0 ? (passedDays / totalDays) * 100 : 0;
                 
                 if (achievementRate >= idealRate) {
+                    // 1. 理想ペースをクリア・または達成している場合
                     if (banner) banner.className = "status-banner success";
                     if (statusTitle) statusTitle.textContent = "✨ 順調ペース！この調子で目標を掴み取ろう！";
                     if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペースクリア中 👍）`;
+                } else if (achievementRate >= idealRate * 0.95) {
+                    // 2. 理想ペースに対して「わずかな遅れ（95%〜99%）」の場合（ほぼ互角・順調圏内）
+                    if (banner) banner.className = "status-banner info";
+                    if (statusTitle) statusTitle.textContent = "👍 ほぼ互角の好ペース！少しの工夫で追いつけます！";
+                    if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペース ${idealRate.toFixed(1)}%とほぼ同等です）`;
                 } else if (achievementRate >= idealRate * 0.85) {
+                    // 3. 少し遅れが出ている（85%〜94%）場合
                     if (banner) banner.className = "status-banner warning";
                     if (statusTitle) statusTitle.textContent = "⚠️ 少しペースアップが必要です！";
                     if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペース ${idealRate.toFixed(1)}%に対してやや遅れ）`;
                 } else {
+                    // 4. 大きく遅れている（85%未満）場合
                     if (banner) banner.className = "status-banner danger";
-                    if (statusTitle) statusTitle.textContent = "🔥 大ピンチ！みんなで力を合わせて巻き返そう！";
+                    if (statusTitle) statusTitle.textContent = "🔥 大ピンチ！知恵を絞ってここから巻き返そう！";
                     if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （ここからの爆発的な巻き返しが鍵です！）`;
                 }
             }
@@ -652,12 +661,15 @@
             const paceEl = document.getElementById('pace-status');
             if (paceEl) {
                 if (targetSales > 0 && passedDays > 0) {
-                    if (achievementRate < idealRate) {
-                        paceEl.className = "alert-text";
-                        paceEl.textContent = `（理想: ${idealRate.toFixed(1)}% ⚠️ 要ペースアップ）`;
-                    } else {
+                    if (achievementRate >= idealRate) {
                         paceEl.className = "success-text";
                         paceEl.textContent = `（理想: ${idealRate.toFixed(1)}% 👍 順調）`;
+                    } else if (achievementRate >= idealRate * 0.95) {
+                        paceEl.className = "success-text";
+                        paceEl.textContent = `（理想: ${idealRate.toFixed(1)}% ✨ ほぼ互角）`;
+                    } else {
+                        paceEl.className = "alert-text";
+                        paceEl.textContent = `（理想: ${idealRate.toFixed(1)}% ⚠️ 要ペースアップ）`;
                     }
                 } else {
                     paceEl.textContent = "";
