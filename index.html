@@ -157,6 +157,24 @@
             justify-content: space-between;
         }
 
+        /* オールクリアボタンのスタイル */
+        .all-clear-btn {
+            background-color: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #cbd5e0;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .all-clear-btn:hover {
+            background-color: #edf2f7;
+            border-color: #a0aec0;
+            color: #2d3748;
+        }
+
         .help-toggle {
             font-size: 11px;
             color: #3182ce;
@@ -392,7 +410,10 @@
             <!-- 目標・実績の入力 -->
             <div class="section-label">
                 <span>👇 変更・入力する項目（手動）</span>
-                <span class="help-toggle" onclick="toggleHelp()">💡 入力項目の解説</span>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button type="button" class="all-clear-btn" onclick="allClearInputs()">🔄 オールクリア</button>
+                    <span class="help-toggle" onclick="toggleHelp()">💡 入力項目の解説</span>
+                </div>
             </div>
 
             <div id="help-box" class="help-box">
@@ -499,6 +520,18 @@
         function toggleHelp() {
             const box = document.getElementById('help-box');
             box.style.display = box.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // 手動入力項目のすべてを一括クリアする関数
+        function allClearInputs() {
+            if (confirm("手動入力の数値をすべてクリアしますか？")) {
+                document.getElementById('passed-days').value = '';
+                document.getElementById('target-sales').value = '';
+                document.getElementById('current-sales').value = '';
+                document.getElementById('unit-price').value = '';
+                document.getElementById('turnover-rate').value = '';
+                updateSimulation(); // クリアと同時に計算結果も更新
+            }
         }
 
         // 千円単位（千の位で四捨五入して下3桁を0にする）
