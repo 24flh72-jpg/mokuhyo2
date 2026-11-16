@@ -413,7 +413,7 @@
             <!-- ステータスバナー -->
             <div id="status-banner" class="status-banner">
                 <div class="status-title" id="status-title">数値を入力してください</div>
-                <div class="status-desc" id="status-desc">目標売上と現状売上を入れると、現在のチームの状況が判定されます</div>
+                <div class="status-desc" id="status-desc">目標売上と現状売上を入れると、現在の状況が判定されます</div>
             </div>
 
             <!-- 期間設定 -->
@@ -534,9 +534,9 @@
                 </div>
             </div>
 
-            <!-- アドバイスメッセージ -->
+            <!-- アドバイスメッセージ（ブラッシュアップ版） -->
             <div class="advice-banner">
-                💡 人数確保が厳しい場合は、単価アップや回転率向上の施策も効果的です！
+                💡 人数確保が厳しい場合は、単価アップや回転率向上の施策も効果的です！また、お客様に選ばれるための見せ方の工夫や、外部サイト・他店との比較などもあわせて見直してみましょう！
             </div>
 
             <!-- フッターメッセージ -->
@@ -615,7 +615,7 @@
                 remainingDaysInput.value = remainingDays + '日';
             }
 
-            // ステータスバナーの更新（細分化した4段階設定）
+            // ステータスバナーの更新（4段階設定）
             const banner = document.getElementById('status-banner');
             const statusTitle = document.getElementById('status-title');
             const statusDesc = document.getElementById('status-desc');
@@ -629,22 +629,18 @@
                 const idealRate = totalDays > 0 ? (passedDays / totalDays) * 100 : 0;
                 
                 if (achievementRate >= idealRate) {
-                    // 1. 理想ペースをクリア・または達成している場合
                     if (banner) banner.className = "status-banner success";
                     if (statusTitle) statusTitle.textContent = "✨ 順調ペース！この調子で目標を掴み取ろう！";
                     if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペースクリア中 👍）`;
                 } else if (achievementRate >= idealRate * 0.95) {
-                    // 2. 理想ペースに対して「わずかな遅れ（95%〜99%）」の場合（ほぼ互角・順調圏内）
                     if (banner) banner.className = "status-banner info";
                     if (statusTitle) statusTitle.textContent = "👍 ほぼ互角の好ペース！少しの工夫で追いつけます！";
                     if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペース ${idealRate.toFixed(1)}%とほぼ同等です）`;
                 } else if (achievementRate >= idealRate * 0.85) {
-                    // 3. 少し遅れが出ている（85%〜94%）場合
                     if (banner) banner.className = "status-banner warning";
                     if (statusTitle) statusTitle.textContent = "⚠️ 少しペースアップが必要です！";
                     if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （理想ペース ${idealRate.toFixed(1)}%に対してやや遅れ）`;
                 } else {
-                    // 4. 大きく遅れている（85%未満）場合
                     if (banner) banner.className = "status-banner danger";
                     if (statusTitle) statusTitle.textContent = "🔥 大ピンチ！知恵を絞ってここから巻き返そう！";
                     if (statusDesc) statusDesc.textContent = `現在の達成率: ${achievementRate.toFixed(1)}% （ここからの爆発的な巻き返しが鍵です！）`;
