@@ -155,10 +155,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            white-space: nowrap; /* ラベルが意図せず改行されるのを防止 */
+            white-space: nowrap;
         }
 
-        /* オールクリアボタン（アイコンのみ・コンパクト化） */
+        /* オールクリアボタン（アイコンのみ） */
         .all-clear-btn {
             background-color: #f7fafc;
             color: #4a5568;
@@ -312,7 +312,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .step-card {
@@ -367,6 +367,20 @@
             font-size: 20px;
             color: #ff2a00;
             font-weight: 900;
+        }
+
+        /* アドバイスメッセージのスタイル */
+        .advice-banner {
+            background: #fffaf0;
+            border: 1px solid #feebc8;
+            color: #c05621;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px 12px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            line-height: 1.4;
         }
 
         .footer-message {
@@ -507,10 +521,15 @@
                 <div class="step-card">
                     <div class="step-card-info">
                         <span class="step-name">1日に必要な出勤人数</span>
-                        <span class="step-formula">1日必要本数 ÷ 回転率</span>
+                        <span class="step-formula" style="font-size: 10px; color: #e53e3e; font-weight: bold;">⚠️当欠分も想定して人数集めましょう♪</span>
                     </div>
                     <div class="step-card-value" id="calc-required-staff">0人</div>
                 </div>
+            </div>
+
+            <!-- アドバイスメッセージ -->
+            <div class="advice-banner">
+                💡 人数確保が厳しい場合は、単価アップや回転率向上の施策も効果的です！
             </div>
 
             <!-- フッターメッセージ -->
